@@ -15,6 +15,10 @@ def primes_in_range(x, y):
             prime_list.append(n)
 
     return prime_list
+def gcd(a, b):
+    while b:
+        a, b = b, a % b
+    return a
 
 def extended_gcd(a, b):
     if a == 0:
@@ -42,14 +46,14 @@ def powmod(b, e, m):
         b = (b * b) % m
     return r
 
-def generate_keypair():
+def generate_key():
     prime_list = primes_in_range(5000, 10000)
     p = random.choice(prime_list)
     q = random.choice(prime_list)
     n = p * q
     fn = (p - 1) * (q - 1)
     e = random.randint(2, fn)
-    while math.gcd(e, fn) != 1:
+    while gcd(e, fn) != 1:
         e = random.randint(2, fn)
     d = mod_inverse(e, fn)
     public_key = (e, n)
@@ -82,7 +86,7 @@ def decrypt(encrypted_message, private_key):
         raise ValueError("Input type not supported")
     return decrypted_message
 
-public_key, private_key = generate_keypair()
+public_key, private_key = generate_key()
 print("Public key:", public_key)
 print("Private key:", private_key)
 
