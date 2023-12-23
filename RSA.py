@@ -15,6 +15,7 @@ def primes_in_range(x, y):
             prime_list.append(n)
 
     return prime_list
+
 def gcd(a, b):
     while b:
         a, b = b, a % b
@@ -47,7 +48,7 @@ def powmod(b, e, m):
     return r
 
 def generate_key():
-    prime_list = primes_in_range(5000, 10000)
+    prime_list = primes_in_range(100, 500)
     p = random.choice(prime_list)
     q = random.choice(prime_list)
     n = p * q
@@ -60,10 +61,10 @@ def generate_key():
     private_key = (d, n)
     print("Q is: ", q)
     print("P is: ", p)
-    print("N is :",n)
-    print("FN is:",fn)
-    print('e is:',e)
-    print('d is:',d)
+    print("N is:", n)
+    print("FN is:", fn)
+    print('e is:', e)
+    print('d is:', d)
     return public_key, private_key
 
 def encrypt(message, public_key):
@@ -86,17 +87,16 @@ def decrypt(encrypted_message, private_key):
         raise ValueError("Input type not supported")
     return decrypted_message
 
+# Get user input for the message
+original_text = input("Enter the message to be encrypted: ")
+
+# Generate keys
 public_key, private_key = generate_key()
 print("Public key:", public_key)
 print("Private key:", private_key)
 
-# Encrypt text
-original_text = 'ahmedjhgfds98765'
-print("Original text:", original_text)
+# Encrypt and decrypt the message
 encrypted_text = encrypt(original_text, public_key)
 print("Encrypted text:", encrypted_text)
 decrypted_text = decrypt(encrypted_text, private_key)
 print("Decrypted text:", decrypted_text)
-
-
-
