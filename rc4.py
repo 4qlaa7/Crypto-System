@@ -57,18 +57,12 @@ def rc4_encrypt(key, plaintext):
 
 # decryption
 def rc4_decrypt(key, ciphertext):
-    ciphertext_bytes = [byte for byte in ciphertext]
+    ciphertext_bytes = eval(ciphertext.encode('utf-8'))
+    ciphertext_bytes = [byte for byte in ciphertext_bytes]
     decrypted_bytes = rc4(key, ciphertext_bytes)
-    return bytes(decrypted_bytes).decode('utf-8')
+    decrypted_text = ''.join([chr(byte) for byte in decrypted_bytes])
+    return decrypted_text
 
 # Example usage:
 key = "SecretKey"
-plaintext = input()
 
-# Encryption
-ciphertext = rc4_encrypt(key, plaintext)
-print("Ciphertext:", ciphertext)
-
-# Decryption
-decrypted_text = rc4_decrypt(key, ciphertext)
-print("Decrypted Text:", decrypted_text)
