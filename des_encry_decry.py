@@ -268,6 +268,75 @@ def encrypt(msg,key):
   cipher_text=initial_permutation(combine,final_perm,64)
   return cipher_text
 
+def decrypt(msg,key):
+  print("Encryption")
+  msg=hexa_to_bin(msg)
+  msg = initial_permutation(msg, initial_perm, 64) 
+  print("Message after initial permutation: ",bin_to_hexa(msg))
+  # converting from hexa to binary
+  key = hexa_to_bin(key) 
+
+  key = initial_permutation(key, perm_cho_1, 56)
+  print("The converted 56bit key is: ",key)
+  # Halving the key
+  l=key[0:28]
+  r=key[28:56]
+  # Halving the message
+  left = msg[0:32] 
+  right =msg[32:64] 
+
+  # Key transformation
+  key_from_pc2_bin=[]
+  key_from_pc2_hex=[]
+  for k in range(16):
+    l=shift_left(l,shift_table[k])
+    r=shift_left(r,shift_table[k])
+    combine_key=l+r
+    
+    # permuted choice 2
+    round_key=initial_permutation(combine_key,perm_cho_2,48)
+    key_from_pc2_bin.append(round_key)
+    key_from_pc2_hex.append(bin_to_hexa(round_key))
+  
+  # For decryption, just uncomment below two lines
+  key_from_pc2_bin=key_from_pc2_bin[::-1]
+  key_from_pc2_hex=key_from_pc2_hex[::-1] 
+
+  # Message transformation
+  # Encryption
+  print()
+  
+  print("Round: Left key part: Right key part: SubKey used:")
+  for j in range(16):
+    # Expansion Permutation
+    right_expand=initial_permutation(right,expan_perm,48)
+    xor_x=xor(right_expand,key_from_pc2_bin[j])
+
+    # calculating row and column from s box
+    s_box_str="" 
+    for i in range(0,8):
+      row=bin_to_dec(int(xor_x[i*6]+xor_x[i*6+5]))
+      col=bin_to_dec(int(xor_x[i*6+1]+xor_x[i*6+2]+xor_x[i*6+3]+xor_x[i*6+4]))
+      val=s_box[i][row][col]
+      s_box_str=s_box_str+dec_to_bin(val)
+
+    # towards permutation box
+    s_box_str=initial_permutation(s_box_str,perm_table,32)
+
+    # Now again XOR with left part and above
+    result=xor(left,s_box_str)
+    left=result
+
+    
+    # Swapping
+    if(j!=15):
+      left, right=right, left
+    print(str(j+1).zfill(2),"     ",bin_to_hexa(left),"      ",bin_to_hexa(right),"   ",key_from_pc2_hex[j])
+
+  # concatinating both left and right
+  combine=left+right
+  cipher_text=initial_permutation(combine,final_perm,64)
+  return cipher_text
 # Padding function
 def pad(msg):
   if(len(msg)%16!=0):
@@ -279,17 +348,17 @@ def pad(msg):
   return(msg)
 
 # Main function
-print("Enter the message to be encrypted: ")
-plain_text=input()
-plain_text=pad(plain_text)
-print("Message after padding: ", plain_text)
+# print("Enter the message to be encrypted: ")
+# plain_text=input()
+# plain_text=pad(plain_text)
+# print("Message after padding: ", plain_text)
   
-print("Enter the 64bit key for encryption: ")
-key=input()
-key=pad(key)
-print("Key after padding: ",key)
+# print("Enter the 64bit key for encryption: ")
+# key=input()
+# key=pad(key)
+# print("Key after padding: ",key)
 
-cipher_text=bin_to_hexa(encrypt(plain_text,key))
-print("Cipher text is: ",cipher_text)
+# cipher_text=bin_to_hexa(encrypt(plain_text,key))
+# print("Cipher text is: ",cipher_text)
 
 
