@@ -1,0 +1,1 @@
+{"p": 6983, "q": 7369, "n": 51457727, "g": 6455005, "gg": 3884, "e": 8228759, "fn": 51443376, "alice_private_key": 37627137, "bob_private_key": 3006957, "alice_public_key": 28524543, "bob_public_key": 12807914, "alice_shared_key": 51211765, "bob_shared_key": 51211765}
