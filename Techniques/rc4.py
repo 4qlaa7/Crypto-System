@@ -63,6 +63,5 @@ def rc4_decrypt(key, ciphertext):
     decrypted_text = ''.join([chr(byte) for byte in decrypted_bytes])
     return decrypted_text
 
-# Example usage:
-key = "SecretKey"
+
 
